@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.my.main.dao.MainDao">
+
+
+	<select id="selectStudentAttend" resultType="CamelMap">
+	  	SELECT AA, BB FROM T_CM_TEST
+	</select>
+
+	<!-- 게시판 조회 -->
+	<select id="selectBbs" resultType="CamelMap">
+	  	SELECT 
+    	 BBS_ID
+    	,BBS_TITLE
+    	,BBS_WRITER
+		FROM T_CM_BBS
+	</select>
+	
+	
+	
+	<!-- 룡게시판 조회 -->
+	<select id="selectGold" resultType="CamelMap">
+		SELECT   A1.RN 
+    	,A1.BBS_ID
+    	,LPAD('-', BBS_LEVEL-1, '-')||A1.BBS_TITLE BBS_TITLES
+	    ,A1.BBS_CN
+	    ,A1.BBS_WRITER	
+	    ,A1.BBS_WRITE_DT
+	    ,A1.BBS_UPDATE_DT 
+	    ,A1.BBS_UPP_ID
+	    ,A1.BBS_LEVEL
+	    ,A1.BBS_PROGRS_STATUS
+	    ,A1.BBS_PROGRS_STATUSS
+    FROM
+          (SELECT
+                ROWNUM RN
+                ,BBS_ID
+                ,BBS_TITLE
+                ,BBS_CN
+                ,BBS_WRITER	
+                ,BBS_WRITE_DT
+                ,BBS_UPDATE_DT 
+                ,BBS_UPP_ID
+                ,BBS_LEVEL
+                ,BBS_PROGRS_STATUS
+                ,decode(BBS_PROGRS_STATUS, 'PWD', '승인완료', 'OUT', '승인대기', 'TWH', '임시저장')BBS_PROGRS_STATUSS
+            FROM T_CM_BBS
+            START WITH BBS_LEVEL = 1 --루트노드를 지정
+            CONNECT BY PRIOR BBS_ID = BBS_UPP_ID
+            ORDER SIBLINGS BY BBS_LEVEL) A1
+	  	where 1=1
+	  	<if test='paramStartPageCnt != null and paramStartPageCnt != ""'>
+	  		AND RN<![CDATA[ >= ]]>#{paramStartPageCnt}
+	  	</if>
+	  	<if test='paramEndPageCnt != null and paramEndPageCnt != ""'>
+	  		AND RN<![CDATA[ <= ]]>#{paramEndPageCnt}
+	  	</if>
+	</select>
+	
+	
+	<!-- 관리자게시판 조회 -->
+	<select id="selectAdmin" resultType="CamelMap">
+	  	SELECT 
+	  		A1.RN 
+    		,A1.BBS_ID
+    		,LPAD('-', BBS_LEVEL-1, '-')||A1.BBS_TITLE BBS_TITLES
+    		,A1.BBS_CN
+    		,A1.BBS_WRITER	
+    		,A1.BBS_WRITE_DT
+    		,A1.BBS_UPDATE_DT 
+    		,A1.BBS_UPP_ID
+    		,A1.BBS_LEVEL
+    		,A1.BBS_PROGRS_STATUS
+    		,A1.BBS_PROGRS_STATUSS
+		FROM
+    		(SELECT
+		        ROWNUM RN
+		        ,BBS_ID
+		        ,BBS_TITLE
+		        ,BBS_CN
+		        ,BBS_WRITER	
+		        ,BBS_WRITE_DT
+		        ,BBS_UPDATE_DT 
+		        ,BBS_UPP_ID
+		        ,BBS_LEVEL
+		        ,BBS_PROGRS_STATUS
+		        ,decode(BBS_PROGRS_STATUS, 'PWD', '승인완료', 'OUT', '승인대기', 'TWH', '임시저장') BBS_PROGRS_STATUSS
+    		FROM T_CM_BBS
+    		WHERE BBS_PROGRS_STATUS = #{status}
+    		START WITH BBS_LEVEL = 1 --루트노드를 지정
+    		CONNECT BY PRIOR BBS_ID = BBS_UPP_ID
+    		ORDER SIBLINGS BY BBS_LEVEL) A1
+    	where 1=1
+	  	<if test='paramStartPageCnt != null and paramStartPageCnt != ""'>
+	  		AND RN<![CDATA[ >= ]]>#{paramStartPageCnt}
+	  	</if>
+	  	<if test='paramEndPageCnt != null and paramEndPageCnt != ""'>
+	  		AND RN<![CDATA[ <= ]]>#{paramEndPageCnt}
+	  	</if>
+	</select>
+	
+	
+	<!-- 사용자 게시판 조회 -->
+	<select id="selectUsers" resultType="CamelMap">
+	  	SELECT 
+	  		A1.RN 
+    		,A1.BBS_ID
+    		,LPAD('-', BBS_LEVEL-1, '-')||A1.BBS_TITLE BBS_TITLES
+    		,A1.BBS_CN
+    		,A1.BBS_WRITER	
+    		,A1.BBS_WRITE_DT
+    		,A1.BBS_UPDATE_DT 
+    		,A1.BBS_UPP_ID
+    		,A1.BBS_LEVEL
+    		,A1.BBS_PROGRS_STATUS
+    		,A1.BBS_PROGRS_STATUSS
+		FROM
+    		(SELECT
+		        ROWNUM RN
+		        ,BBS_ID
+		        ,BBS_TITLE
+		        ,BBS_CN
+		        ,BBS_WRITER	
+		        ,BBS_WRITE_DT
+		        ,BBS_UPDATE_DT 
+		        ,BBS_UPP_ID
+		        ,BBS_LEVEL
+		        ,BBS_PROGRS_STATUS
+		        ,decode(BBS_PROGRS_STATUS, 'PWD', '승인완료', 'OUT', '승인대기', 'TWH', '임시저장') BBS_PROGRS_STATUSS
+    		FROM T_CM_BBS
+    		WHERE BBS_PROGRS_STATUS = #{status}
+    		START WITH BBS_LEVEL = 1 --루트노드를 지정
+    		CONNECT BY PRIOR BBS_ID = BBS_UPP_ID
+    		ORDER SIBLINGS BY BBS_LEVEL) A1
+    	where 1=1
+	  	<if test='paramStartPageCnt != null and paramStartPageCnt != ""'>
+	  		AND RN<![CDATA[ >= ]]>#{paramStartPageCnt}
+	  	</if>
+	  	<if test='paramEndPageCnt != null and paramEndPageCnt != ""'>
+	  		AND RN<![CDATA[ <= ]]>#{paramEndPageCnt}
+	  	</if>
+	</select>
+	
+	
+	
+	<!-- 룡게시물 갯수 조회 -->
+	<select id="selectBoard" resultType="int">
+	  	SELECT 
+	  		count(BBS_ID) as NUM 
+	  	FROM T_CM_BBS
+	</select>
+	
+	
+	
+	<!-- 관리자게시물 갯수 조회 -->
+	<select id="selectAdminBoard" resultType="int">
+	  	SELECT 
+	  		count(BBS_ID) as NUM 
+	  	FROM T_CM_BBS
+	  	WHERE BBS_PROGRS_STATUS = #{status}
+	</select>
+	
+	
+	
+	<!-- 사용자게시물 갯수 조회 -->
+	<select id="selectUserBoard" resultType="int">
+	  	SELECT 
+	  		count(BBS_ID) as NUM 
+	  	FROM T_CM_BBS
+	  	WHERE BBS_PROGRS_STATUS = #{status}
+	</select>
+	
+	
+	
+	<!-- 룡게시판 신규 작성 -->
+	<select id="insertInput" resultType="CamelMap">
+	  	INSERT INTO T_CM_BBS
+	  	(
+	  		 BBS_ID
+	  		,BBS_TITLE
+	  		,BBS_CN
+	  		,BBS_WRITER
+	  		,BBS_WRITE_DT
+	  		,BBS_PROGRS_STATUS
+	  		,BBS_LEVEL
+	  	)
+  		VALUES
+  		(	  			
+  			 NVL((SELECT MAX(BBS_ID)+1 FROM T_CM_BBS),10000)
+  			,#{title}
+  			,#{cn}
+  			,#{writer}
+  			,SYSDATE
+  			,#{status}
+  			,'1'
+  		)
+	</select>
+	
+	
+	<!-- 룡게시판 일괄 작성 -->
+	<select id="multiInput" resultType="CamelMap">
+	  	INSERT INTO T_CM_BBS
+	  	(
+	  		 BBS_ID
+	  		,BBS_TITLE
+	  		,BBS_CN
+	  		,BBS_WRITER
+	  		,BBS_WRITE_DT
+	  		,BBS_LEVEL
+	  		,BBS_PROGRS_STATUS
+	  	)
+  		VALUES
+  		(	  			
+  			 NVL((SELECT MAX(BBS_ID)+1 FROM T_CM_BBS),10000)<!-- NVL (해당 값이 없으면 , 다음꺼 출력) -->
+  			,#{title}<!-- 너가 지금 이 이름으로 찾으라고 설정을 해놨는데!!!! bbsTitle=제목1 이게 지금 너가 설정한 이름이잔아 그럼 당연히 못찾기 그닌깐 착하게 ? 몰라요 라고 해주잔어-->
+  			,#{cn}<!-- 아항 -->
+  			,#{writer}	  			
+  			,SYSDATE
+  			,'1'
+  			,#{status}
+  		)
+	</select>
+	
+	
+	<!-- 룡게시판 답글 작성  -->
+	<select id="bbsComment" resultType="CamelMap">
+	  	INSERT INTO T_CM_BBS
+	  	(
+	  		 BBS_ID
+	  		,BBS_TITLE
+	  		,BBS_CN
+	  		,BBS_WRITER
+	  		,BBS_WRITE_DT
+	  		,BBS_LEVEL
+	  		,BBS_UPP_ID
+	  		,BBS_PROGRS_STATUS
+	  	)
+  		VALUES
+  		(	  			
+  			 NVL((SELECT MAX(BBS_ID)+1 FROM T_CM_BBS),10000)
+  			,#{title}
+  			,#{cn} 
+  			,#{writer}
+  			,SYSDATE
+  			,TO_NUMBER(#{bbsLevel})+1
+  			,TO_NUMBER(#{bbsId})
+  			,#{status}
+  		)
+	</select>
+	
+	
+	
+	<!-- 룡게시판 상세조회 -->
+	<select id="selectBbsDetil" resultType="CamelMap">
+	  	SELECT 
+	  		 BBS_ID
+	  		,BBS_TITLE
+	  		,BBS_CN
+	  		,BBS_WRITER
+	  		,BBS_WRITE_DT
+	  		,BBS_UPDATE_DT
+	  		,BBS_LEVEL
+	  	FROM T_CM_BBS
+	  	WHERE BBS_ID = #{bbsId}
+	  	ORDER BY BBS_ID
+	</select>
+	
+	
+	
+	<!-- 스트링 시큐리티 로그인 정보 가져오기 -->
+	<select id="selectUser" resultType="CamelMap">
+	  	SELECT 
+	  		 LOGIN_ID as username
+	  		,LOGIN_PASS as password
+	  		,LOGIN_EN as enabled
+	  		,USER_AUTHORITY as authority
+	  		,USER_NM as nickname
+	  		,USER_ID as userId
+	  	FROM T_CM_USER
+	  	WHERE LOGIN_ID = #{loginId}
+	</select>
+	
+
+	
+	<!-- 룡게시판 상세조회 팝업 -->
+	<select id="selectBbsDetil1" resultType="CamelMap">
+	  	SELECT 
+	  		 BBS_ID
+	  		,BBS_TITLE
+	  		,BBS_CN
+	  		,BBS_WRITER
+	  		,BBS_WRITE_DT
+	  		,BBS_UPDATE_DT 
+	  	FROM T_CM_BBS
+	  	WHERE BBS_ID = #{bbsId}
+	</select>
+	
+	
+	
+	<!-- 룡게시판 상세정보 수정 -->
+	<select id="detailInput" resultType="CamelMap">
+	  	UPDATE T_CM_BBS 
+	  	SET
+	  		BBS_TITLE = #{title}
+	  		,BBS_CN = #{cn}
+	  		,BBS_WRITER = #{writer}	
+	  		,BBS_UPDATE_DT = SYSDATE
+	  	WHERE 
+	  		BBS_ID = #{bbsId}
+	</select>
+
+	
+	<!-- 룡게시판 서류 제출처리 -->
+	<select id="submitStastus" resultType="CamelMap">
+	  	UPDATE T_CM_BBS 
+	  	SET
+	  		BBS_PROGRS_STATUS = #{status}
+	  	WHERE 
+	  		BBS_ID = #{bbsId}
+	</select>
+	
+	
+	<!-- 룡게시판 상세정보 삭제 -->
+	<select id="deleteBbs" resultType="CamelMap">
+	  	DELETE FROM T_CM_BBS
+	  	WHERE 
+	  	BBS_ID = #{bbsId}
+	</select>
+	
+	<!-- 상세정보 댓글 작성  -->
+	<select id="insertDetailComment" resultType="CamelMap">
+		INSERT INTO T_CM_COMMENT
+		(
+			 COMMENT_ID
+			,BBS_ID
+			,COMMENT_CN
+			,BGST_DT
+		)
+		VALUES
+		(
+			 NVL((SELECT MAX(COMMENT_ID)+1 FROM T_CM_COMMENT),20000)
+			,TO_NUMBER(#{bbsId})
+			,#{commentCn}
+			,SYSDATE
+		)
+	</select>
+	
+	<!-- 상세정보 댓글 조회-->
+	<select id="selectDetailComment" resultType="CamelMap">
+		SELECT 
+			 COMMENT_ID
+			,BBS_ID	
+			,COMMENT_CN
+			,BGST_DT
+			,USER_NM
+		FROM T_CM_COMMENT
+		WHERE BBS_ID = #{bbsId}
+		ORDER BY BGST_DT
+	</select>
+	
+	
+</mapper>

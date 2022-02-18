@@ -1,0 +1,111 @@
+/* @charset "UTF-8"; */
+* {
+	box-sizing : border-box;
+}
+
+body {
+	padding : 10px;
+	font-family: Gulim;
+	background-color: #eee;
+}
+
+.header {
+	padding: 10px;
+	text-align: center;
+	background: white;
+}
+
+.header h1 {
+	font-size: 60px;
+}
+
+.header h2 {
+	text-align: left;
+    font-size: 40px;
+    padding: 10px 0px 10px 10px;
+    font-family: none;
+    font-weight: 500;
+    color: #000000b8;
+}
+
+h1.userH1 {
+	color: coral;
+    border: 1px solid coral;
+    border-radius: 40px;
+}
+
+h1.adminH1 {
+	color: darkgreen;
+    border: 1px solid darkgreen;
+    border-radius: 10px;
+}
+
+
+h1.drgH1 {
+	color: cadetblue;
+    border: 1px solid cadetblue;
+    border-radius: 20px;
+}
+
+
+.nav {
+	overflow: hidden;
+	background-color: #b70202;
+	height: 50px;
+	margin-bottom : 15px;
+}
+
+.nav a {
+	float : left;
+	color: #ffffff;
+	text-align: center;
+	padding: 12px 12px;
+	text-decoration: none;
+}
+
+.left {
+	float: left;
+	width: 90%;
+	background-color: white;
+	margin-bottom : 15px;
+}
+
+.right {
+	float: left;
+	width: 10%;
+	background-color: #80ffff;
+	margin-bottom : 15px;
+}
+
+.bottom {
+	clear:both;
+}
+
+.botter {
+	padding: 10px;
+	text-align: center;
+	background: white;
+}
+
+.botter h1 {
+	font-size: 30px;
+}
+
+/* .maringline { 마진 합병 현상 고치기 투명 라인 */
+/* 	border: 1px solid transparent; */
+/* 	clear :both; */
+/* } */
+
+.maincontent {
+	margin: 5px 5px;
+	background-color: #eee;
+}
+
+.subcontent {
+	margin: 5px 5px;
+	background-color: #eee;
+}
+
+.center {
+	display : block;
+}

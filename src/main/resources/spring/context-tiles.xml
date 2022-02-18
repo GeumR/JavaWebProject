@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+   <!-- main -->
+   <definition name="main-layout" template="/WEB-INF/jsp/Commonlayout/base_main.jsp">
+       <put-attribute name="topMenu" value="/WEB-INF/jsp/Commonlayout/topMenu.jsp" />
+       <put-attribute name="body" value=""/>
+       <put-attribute name="hadanPage" value="/WEB-INF/jsp/Commonlayout/hadanPage.jsp" />
+   </definition>
+   
+   <definition name="system/*" extends="main-layout">
+       <put-attribute name="body" value="/WEB-INF/jsp/system/{1}.jsp" />
+   </definition>
+   
+</tiles-definitions>
+
+

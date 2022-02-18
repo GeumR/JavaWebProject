@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	
+
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/websocket
+        http://www.springframework.org/schema/websocket/spring-websocket-4.0.xsd">
+
+	<annotation-driven />
+	<context:annotation-config />
+
+	<resources mapping="/resources/**" location="/WEB-INF/resources/" />
+	<resources mapping="/css/**" location="/WEB-INF/css/" />
+
+	<!-- ========== !!!타일즈 설정!!! ======= -->
+	<beans:bean id="tilesConfigurer"
+		class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:list>
+				<beans:value>classpath*:/spring/context-tiles.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+	
+	<beans:bean id="tilesViewResolver"
+		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass"
+			value="org.springframework.web.servlet.view.tiles3.TilesView" />
+		<beans:property name="order" value="1" />
+	</beans:bean>
+	<!-- ========== !!!타일즈 설정!!! =======-->
+	
+	
+	<beans:bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<beans:property name="prefix" value="/WEB-INF/jsp/" />
+		<beans:property name="suffix" value=".jsp" />
+		<beans:property name="order" value="2" />
+	</beans:bean>
+
+
+	<context:component-scan base-package="com.my.main">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	
+	<beans:bean class="com.my.websocket.ChatMessageController"/>
+	<websocket:message-broker application-destination-prefix="/publish">
+		<websocket:stomp-endpoint path="/websockethandler" >
+			<websocket:sockjs />
+		</websocket:stomp-endpoint>
+		<websocket:simple-broker prefix="/subscribe" />
+	</websocket:message-broker>
+	
+<!-- 	<beans:bean id="chatHandler" class="com.my.websocket.ChatHandler"/> -->
+<!-- 	<websocket:handlers> -->
+<!-- 		<websocket:mapping handler="chatHandler" path="/chat"/> -->
+<!-- 		<websocket:handshake-interceptors> -->
+<!-- 			<beans:bean class="com.my.util.CamelMap"/> -->
+<!-- 		</websocket:handshake-interceptors> -->
+<!-- 		<websocket:sockjs/> -->
+<!-- 	</websocket:handlers> -->
+</beans:beans>

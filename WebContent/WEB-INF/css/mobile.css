@@ -1,0 +1,29 @@
+/* @charset "UTF-8"; */
+body {
+	margin : 0px;
+	padding: 0px;
+}
+
+.left, .right .center{
+	width: 100%;
+	padding: 0;	
+}
+
+.header h1 {
+	font-size:30px;
+}
+
+.botter h1 {
+	font-size: 15px;
+}
+
+.nav {
+	background-color: #ff0080;
+	height: 30px;
+}
+
+.nav a {
+	float: none;
+	width: 100%;
+	
+}
